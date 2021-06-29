@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FindHome.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FindHome.Data
 {
@@ -24,7 +25,8 @@ namespace FindHome.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.Entity<Location>()
+                .HasKey(x => new { x.AddressId, x.CityId, x.CountryId, x.ZipCodeId });
         }
     }
 }
