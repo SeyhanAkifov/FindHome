@@ -6,11 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Home\Index.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Home\Index.cshtml" />
     <None Include="wwwroot\fonts\Flaticon.svg" />
     <None Include="wwwroot\fonts\Flaticon.woff2" />
     <None Include="wwwroot\fonts\fontawesome-webfont.svg" />

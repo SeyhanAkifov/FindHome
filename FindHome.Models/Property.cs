@@ -24,6 +24,8 @@ namespace FindHome.Models
         [Required]
         public int Rooms { get; set; }
 
+        public IdentityUser Owner { get; set; }
+
         public Location Location { get; set; }
     }
 }

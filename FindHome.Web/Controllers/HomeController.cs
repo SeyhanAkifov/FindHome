@@ -20,7 +20,7 @@ namespace FindHome.Web.Controllers
 
         public IActionResult Index()
         {
-            return View("Index1");
+            return View();
         }
 
         public IActionResult Index1()
