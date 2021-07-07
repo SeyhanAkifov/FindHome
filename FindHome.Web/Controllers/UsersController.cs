@@ -15,14 +15,17 @@ namespace FindHome.Web.Controllers
     {
 
         private readonly UserManager<IdentityUser> userManager;
-        
-        
+        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly SignInManager<IdentityUser> signInManager;
 
 
-        public UsersController(UserManager<IdentityUser> userManager)
+
+
+        public UsersController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager)
         {
             this.userManager = userManager;
-           
+            this.roleManager = roleManager;
+            this.signInManager = signInManager;
         }
 
 
@@ -35,19 +38,39 @@ namespace FindHome.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginInputModel model)   
         {
-            if (ModelState.IsValid)
-            {
-                var user = new IdentityUser { UserName = model.Email };
-                var result = await userManager.CreateAsync(user, model.Password);
-                await userManager.AddToRoleAsync(user, "User");
-                
-               
-                
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-            }
+            
+                //var user = new IdentityUser { UserName = model.Email , Email = model.Email, EmailConfirmed = true};
+                //var result = await userManager.CreateAsync(user, model.Password);
+                //if (result.Succeeded)
+                //{
+                    //IdentityRole role = new IdentityRole
+                    //{
+                    //    Name = "User"
+                    //};
+                    //await roleManager.CreateAsync(role);
+
+                    //await userManager.AddToRoleAsync(user, "User");
+
+                    //await signInManager.SignInAsync(user, isPersistent: false);
+
+                await signInManager.PasswordSignInAsync(model.Email,
+                           model.Password, false, true );
+
+
+
+                //}
+
+
+                //await userManager.AddToRoleAsync(user, "User");
+
+                //await signInManager.SignInAsync(user, isPersistent: false);
+
+
+                //foreach (var error in result.Errors)
+                //{
+                //    ModelState.AddModelError(string.Empty, error.Description);
+                //}
+            
 
             return RedirectToAction("Index", "Home");
         }
@@ -59,9 +82,13 @@ namespace FindHome.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(RegisterInputModel model)
+        public async Task<IActionResult> Register(RegisterInputModel model)
         {
-            return this.View();
+            var user = new IdentityUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
+            await userManager.CreateAsync(user, model.Password);
+            await userManager.AddToRoleAsync(user, "User");
+
+            return RedirectToAction("Login", "Users");
         }
 
         [HttpGet]

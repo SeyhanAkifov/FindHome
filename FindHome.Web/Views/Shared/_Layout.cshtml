@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
 <html dir="ltr" lang="en">
 <head>
     <meta charset="utf-8">
@@ -187,8 +191,23 @@
                         <li class="last">
                             <a asp-controller="Home" asp-action="Contact"><span class="title">Contact</span></a>
                         </li>
-                        <li class="list-inline-item list_s"><a href="#" class="btn flaticon-user" data-toggle="modal" data-target=".bd-example-modal-lg"> <span class="dn-lg">Login/Register</span></a></li>
-                        <li class="list-inline-item add_listing"><a href="page-add-new-property.html"><span class="flaticon-plus"></span><span class="dn-lg"> Create Listing</span></a></li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li>
+                            <a class="list-inline-item list_s">Hello @User.Identity.Name!</a>
+                            </li>
+                            <li>
+                            <form class="form-check-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                            </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="list-inline-item list_s"><a href="#" class="btn flaticon-user" data-toggle="modal" data-target=".bd-example-modal-lg"> <span class="dn-lg">Login/Register</span></a></li>
+                        }
+
+                        <li class="list-inline-item add_listing"><a asp-controller="Property" asp-action="Add"><span class="flaticon-plus"></span><span class="dn-lg"> Create Listing</span></a></li>
                     </ul>
                 </nav>
             </div>
@@ -222,7 +241,7 @@
                                 </div>
                                 <div class="col-lg-6 col-xl-6">
                                     <div class="login_form">
-                                        <form action="#">
+                                        <form asp-controller="Users" asp-action="Login" method="post">
                                             <div class="heading">
                                                 <h4>Login</h4>
                                             </div>
@@ -236,13 +255,13 @@
                                             </div>
                                             <hr>
                                             <div class="input-group mb-2 mr-sm-2">
-                                                <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="User Name Or Email">
+                                                <input type="text" class="form-control" name="email" placeholder="User Name Or Email">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text"><i class="flaticon-user"></i></div>
                                                 </div>
                                             </div>
                                             <div class="input-group form-group">
-                                                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                                                <input type="password" class="form-control" name="password" placeholder="Password">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text"><i class="flaticon-password"></i></div>
                                                 </div>
@@ -269,7 +288,7 @@
                                         <div class="heading">
                                             <h4>Register</h4>
                                         </div>
-                                        <form action="#">
+                                        <form asp-controller="Users" asp-action="Register" method="post">
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     <button type="submit" class="btn btn-block btn-fb"><i class="fa fa-facebook float-left mt5"></i> Login with Facebook</button>
@@ -280,25 +299,25 @@
                                             </div>
                                             <hr>
                                             <div class="form-group input-group">
-                                                <input type="text" class="form-control" id="exampleInputName" placeholder="User Name">
+                                                <input type="text" class="form-control" name="userName" placeholder="User Name">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text"><i class="flaticon-user"></i></div>
                                                 </div>
                                             </div>
                                             <div class="form-group input-group">
-                                                <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Email">
+                                                <input type="email" class="form-control" name="email" placeholder="Email">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text"><i class="fa fa-envelope-o"></i></div>
                                                 </div>
                                             </div>
                                             <div class="form-group input-group">
-                                                <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
+                                                <input type="password" class="form-control" name="password" placeholder="Password">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text"><i class="flaticon-password"></i></div>
                                                 </div>
                                             </div>
                                             <div class="form-group input-group">
-                                                <input type="password" class="form-control" id="exampleInputPassword3" placeholder="Re-enter password">
+                                                <input type="password" class="form-control" name="confirmPassword" placeholder="Re-enter password">
                                                 <div class="input-group-prepend">
                                                     <div class="input-group-text"><i class="flaticon-password"></i></div>
                                                 </div>
@@ -346,7 +365,7 @@
                         <span>Home</span>
                         <ul>
                             <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                            
+
                         </ul>
                     </li>
                     <li>
@@ -465,20 +484,20 @@
 
         <!-- Inner Page Breadcrumb -->
         @*<section class="inner_page_breadcrumb">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-6">
-                        <div class="breadcrumb_content">
-                            <h4 class="breadcrumb_title">Logın</h4>
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Logın</li>
-                            </ol>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <div class="breadcrumb_content">
+                                <h4 class="breadcrumb_title">Logın</h4>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Logın</li>
+                                </ol>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>*@
+            </section>*@
 
         @RenderBody()
 
