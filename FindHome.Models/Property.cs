@@ -24,6 +24,8 @@ namespace FindHome.Models
         [Required]
         public int Rooms { get; set; }
 
-        public Location Location { get; set; }
+        public int AddressId { get; set; }
+
+        public Address Address { get; set; }
     }
 }

@@ -14,5 +14,7 @@ namespace FindHome.Models
 
         [Required]
         public string CountryName { get; set; }
+
+        public ICollection<City> Cities { get; set; }
     }
 }

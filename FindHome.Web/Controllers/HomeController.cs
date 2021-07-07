@@ -1,11 +1,7 @@
 ﻿using FindHome.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FindHome.Web.Controllers
 {
@@ -20,10 +16,20 @@ namespace FindHome.Web.Controllers
 
         public IActionResult Index()
         {
-            return View("Index1");
+            return View();
         }
 
-        public IActionResult Index1()
+        public IActionResult NotFound()
+        {
+            return View();
+        }
+
+        public IActionResult Contact()
+        {
+            return View();
+        }
+
+        public IActionResult AboutUs()
         {
             return View();
         }
